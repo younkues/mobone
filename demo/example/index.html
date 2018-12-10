@@ -1,0 +1,123 @@
+<script src="../release/latest/mobone.js"></script>
+<style>
+  .bone {
+    position: absolute;
+    background: #333;
+  }
+
+  .bone.horizontal {
+    width: 100px;
+    height: 5px;
+  }
+
+  .bone.vertical {
+    width: 5px;
+    height: 100px;
+  }
+
+  .bone:before,
+  .bone:after {
+    content: "";
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #f55;
+  }
+
+  .bone.vertical:before {
+    left: 50%;
+    top: 0%;
+  }
+
+  .bone.vertical:after {
+    left: 50%;
+    top: 100%;
+  }
+
+  .bone.horizontal:before {
+    left: 0%;
+    top: 50%;
+  }
+
+  .bone.horizontal:after {
+    left: 100%;
+    top: 50%;
+  }
+
+  .body {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 100px;
+    border: 5px solid black;
+  }
+
+  .arm {}
+
+  .arm.right {
+    left: 90%;
+    top: 20%;
+  }
+
+  .arm.left {
+    right: 90%;
+    top: 20%;
+  }
+
+  .arm.left .arm2, .arm.left .arm3 {
+    right: 100%;
+  }
+
+  .arm.left .arm2 .hand {
+    right: 100%;
+  }
+
+  .arm.right .arm2 {
+    left: 100%;
+  }
+
+  .arm.right .arm2 .hand {
+    left: 100%;
+  }
+</style>
+<div class="body">
+  <div class="arm left bone horizontal">
+    <div class="arm2 bone horizontal">
+      <div class="arm3 bone horizontal">
+        <div class="hand bone horizontal">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="arm right bone horizontal">
+    <div class="arm2 bone horizontal">
+      <div class="hand bone horizontal">
+
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../release/latest/mobone.js"></script>
+<script>
+  const mobone = new Mobone(".body");
+
+  // left arm
+  const handLeft = mobone.add(".arm.left", { origin: "100% 50%" })
+    .add(".arm2", { origin: "100% 50%" })
+    .add(".arm3", { origin: "100% 50%" })
+    .add(".hand", { origin: "100% 50%" });
+
+  // right arm
+  const hnadRight = mobone.add(".arm.right", { origin: "0% 50%" })
+    .add(".arm2", { origin: "0% 50%" })
+    .add(".hand", { origin: "0% 50%" });
+
+
+
+  handLeft.move([-60], 2);
+  hnadRight.move(60, 0);
+</script>
