@@ -1,7 +1,7 @@
 import { TRANSFORM, fromCSS, isString } from "@daybrush/utils";
 import { BONE, MOBONE } from "./consts";
 import {$, isNumber} from "./utils";
-import Mobone from "./Mobone";
+import Scene, {SceneItem} from "scenejs";
 
 export interface IBoneInterface {
   transform?: string;
@@ -15,8 +15,10 @@ export default class Bone {
   public el: HTMLElement;
   public state: Required<IBoneInterface>;
   public type: string = BONE;
+  public item: Scene | SceneItem;
   constructor(el: string | HTMLElement, state: IBoneInterface = {}) {
     this.el = isString(el) ? $(el, state.parent && state.parent.el) : el;
+    this.item = new SceneItem();
 
     const {[TRANSFORM]: transform, "transform-origin": origin} =
       fromCSS(this.el, [TRANSFORM, "transform-origin"]);
@@ -79,6 +81,10 @@ export default class Bone {
     }
     return baseParent;
   }
+  public snapshot(time: number) {
+    (this.item as SceneItem).set(time, "transform", "rotate", `${this.state.rotate}deg`);
+    return this;
+  }
   public parent(base: number | string | HTMLElement = 1) {
     if (isNumber(base)) {
       let parent: Bone = this;
@@ -102,8 +108,14 @@ export default class Bone {
     }
     return baseParent;
   }
-  public move(degs: number | number[], split: number = 0) {
-    const divide = Math.min(this.state.depth - 2, split);
+  public move(degs: number | number[], base: number | HTMLElement | string = 1) {
+    const baseParent =  base instanceof Bone ? base : this.parent(base);
+
+    if (!baseParent) {
+      return this;
+    }
+    const depth = this.state.depth;
+    const divide = Math.min(depth - 2, depth - baseParent.state.depth - 1);
     let parent = this.parent();
     let deg;
     let deg2 = 0;
