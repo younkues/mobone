@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 	  "outDir": "./outjs/",
-	  "esModuleInterop": false,
+	  "esModuleInterop": true,
 		"sourceMap": true,
 	  "noImplicitAny": true,
 	  "module": "es2015",
@@ -10,7 +10,7 @@
 		"noUnusedLocals": true,
 		"skipLibCheck": true,
 		"moduleResolution": "node",
-		"lib": ["es2015", "dom"],
+		"lib": ["es2016", "dom"],
 	},
 	"include": ["./src/**/*.ts"],
 	"exclude": ["node_modules"]

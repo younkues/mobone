@@ -58,7 +58,7 @@ export default [
     },
   }, {
     input: 'src/index.umd.ts',
-    plugins: [...plugins, resolvePlugin, uglifyCode],
+    plugins: [...plugins, resolvePlugin],
     output: {
       ...output,
       format: "umd",
