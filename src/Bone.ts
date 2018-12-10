@@ -35,8 +35,10 @@ export default class Bone {
   public remove(el: Bone | string | HTMLElement) {
     const bone = el instanceof Bone ? el : this.get(el);
 
-    bone.state.parent = null;
     this.state.childs.delete(bone.el);
+    const mobone = this.base();
+
+    mobone && mobone.remove(bone);
   }
   public set(bone: Bone) {
     this.state.childs.set(bone.el, bone);
