@@ -1,6 +1,7 @@
 import { TRANSFORM, fromCSS, isString } from "@daybrush/utils";
 import { BONE, MOBONE } from "./consts";
 import {$, isNumber} from "./utils";
+import Mobone from "./Mobone";
 
 export interface IBoneInterface {
   transform?: string;
@@ -52,18 +53,9 @@ export default class Bone {
 
     this.set(bone);
 
-    let parent = this.state.parent;
-    while (true) {
-      if (!parent) {
-        break;
-      }
-      if (parent.type !== MOBONE) {
-        parent = parent.state.parent;
-        continue;
-      }
-      parent.set(bone);
-      break;
-    }
+    const mobone = this.base();
+
+    mobone && mobone.set(bone);
     return bone;
   }
   public rotate(deg: number) {
@@ -73,6 +65,17 @@ export default class Bone {
 
     this.el.style.cssText += `${TRANSFORM}:${state.transform} rotate(${deg}deg);`;
     return this;
+  }
+  public base() {
+    let baseParent: Bone = this.parent();
+
+    while (baseParent) {
+      if (baseParent.type === MOBONE) {
+        return baseParent;
+      }
+      baseParent = baseParent.parent();
+    }
+    return baseParent;
   }
   public parent(base: number | string | HTMLElement = 1) {
     if (isNumber(base)) {
